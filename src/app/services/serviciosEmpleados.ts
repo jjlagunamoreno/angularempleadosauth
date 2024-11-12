@@ -1,35 +1,30 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, throwError } from "rxjs";
+import { Login } from "../models/login"; // Modelo Login
+import { Observable } from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { environment } from "../../environments/environment";
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class ServiceEmpleados {
+    public token: string = '';
+
     constructor(private _http: HttpClient) { }
 
-    // MÉTODO PARA REALIZAR EL LOGIN
-    loginEmpleado(userName: string, password: string): Observable<any> {
-        const request = "Auth/Login";
-        const url = environment.apiUrlEmpleados + request;
-
-        // ESTRUCTURA DEL BODY PARA LA PETICIÓN
-        const body = {
-            userName: userName,
-            password: password
-        };
-
-        // CABECERAS DE LA PETICIÓN
+    loginEmpleado(user: Login): Observable<any> {
+        const json = JSON.stringify(user);
         const headers = new HttpHeaders().set("Content-type", "application/json");
-
-        // DEVOLVEMOS EL RESULTADO DE LA PETICIÓN POST
-        return this._http.post(url, JSON.stringify(body), { headers: headers }).pipe(
-            catchError(err => {
-                // MANEJO DE ERRORES
-                console.error("Error en la petición POST: ", err);
-                return throwError(() => new Error("Credenciales inválidas"));
-            })
-        );
+        const request = "auth/login";
+        const url = environment.apiUrlEmpleados + request;
+        return this._http.post(url, json, { headers: headers });
     }
+
+    getPerfilEmpleado(): Observable<any> {
+        const request = "api/empleados/perfilempleado";
+        const url = environment.apiUrlEmpleados + request;
+        const headers = new HttpHeaders().set("Authorization", `Bearer ${this.token}`);
+        return this._http.get(url, { headers: headers });
+    }
+
 }
