@@ -1,0 +1,21 @@
+.notfound-container {
+    margin-top: 10%;
+    color: #333;
+}
+
+.notfound-container h1 {
+    font-size: 6rem;
+    font-weight: bold;
+    color: #dc3545;
+    /* Color rojo Bootstrap */
+}
+
+.notfound-container h2 {
+    font-size: 2rem;
+    color: #555;
+}
+
+.notfound-container p {
+    font-size: 1.2rem;
+    color: #777;
+}
