@@ -7,13 +7,13 @@ import { HomeComponent } from './components/home/home.component';
 import { MenuComponent } from './components/menu/menu.component';
 import { NotfoundComponent } from './components/notfound/notfound.component';
 import { LoginComponent } from './components/login/login.component';
+import { SubordinadosComponent } from './components/subordinados/subordinados.component';
 
 //servicios necesarios a importar
 import { FormsModule } from '@angular/forms';
 import { provideHttpClient } from '@angular/common/http';
-import { ServiceEmpleados } from './services/serviciosEmpleados';
+import { ServiceEmpleados } from './services/service.empleados';
 import { PerfilComponent } from './components/perfil/perfil.component';
-
 
 @NgModule({
   declarations: [
@@ -22,14 +22,15 @@ import { PerfilComponent } from './components/perfil/perfil.component';
     MenuComponent,
     NotfoundComponent,
     LoginComponent,
-    PerfilComponent
+    PerfilComponent,
+    SubordinadosComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule
   ],
-  providers: [provideHttpClient(),ServiceEmpleados],
+  providers: [provideHttpClient(), ServiceEmpleados],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

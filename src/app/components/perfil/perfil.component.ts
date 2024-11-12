@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceEmpleados } from '../../services/serviciosEmpleados';
+import { ServiceEmpleados } from '../../services/service.empleados';
+import { Empleado } from '../../models/empleado';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
@@ -7,25 +9,26 @@ import { ServiceEmpleados } from '../../services/serviciosEmpleados';
   styleUrls: ['./perfil.component.css']
 })
 export class PerfilComponent implements OnInit {
-  public empleados: any[] = []; // Array para almacenar los empleados
+  public empleado!: Empleado;
 
-  constructor(private _service: ServiceEmpleados) { }
+  constructor(
+    private _service: ServiceEmpleados,
+    private _router: Router
+  ) { }
 
-  ngOnInit(): void {
-    // Verificamos si el token está disponible en el servicio
-    if (this._service.token) {
-      this._service.getPerfilEmpleado().subscribe({
-        next: response => {
-          console.log("Empleados obtenidos:", response);
-          this.empleados = response; // Guardamos la lista de empleados en el array
-        },
-        error: err => {
-          console.error(err);
-          alert("No se pudieron obtener los empleados. Verifica tu conexión.");
-        }
-      });
-    } else {
-      alert("No estás autenticado. Por favor, inicia sesión.");
+  async ngOnInit(): Promise<void> {
+    if (!this._service.token) {
+      this._router.navigate(['/login']);
+      return;
+    }
+
+    try {
+      const response = await this._service.getPerfilEmpleado();
+      console.log('Perfil del empleado obtenido:', response);
+      this.empleado = response;
+    } catch (error) {
+      console.error('Error al obtener el perfil del empleado:', error);
+      alert('No se pudo cargar el perfil del empleado. Por favor, verifica tu conexión o credenciales.');
     }
   }
 }

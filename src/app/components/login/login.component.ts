@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
-import { ServiceEmpleados } from '../../services/serviciosEmpleados';
-import { Login } from '../../models/login'; // Importa el modelo
+import { ServiceEmpleados } from '../../services/service.empleados';
+import { Login } from '../../models/login';
 
 @Component({
   selector: 'app-login',
@@ -15,9 +15,9 @@ export class LoginComponent {
   constructor(
     private _service: ServiceEmpleados,
     private _router: Router
-  ) {}
+  ) { }
 
-  onLogin(): void {
+  async onLogin(): Promise<void> {
     const usuario = this.cajaUsuario.nativeElement.value.trim();
     const password = this.cajaPassword.nativeElement.value.trim();
 
@@ -26,26 +26,17 @@ export class LoginComponent {
       return;
     }
 
-    // Crea un objeto Login con los datos del formulario
-    const loginData: Login = {
-      userName: usuario,
-      password: password
-    };
+    const loginData = new Login(usuario, password);
 
-    this._service.loginEmpleado(loginData).subscribe({
-      next: response => {
-        console.log("Respuesta del servidor:", response);
-
-        // Guardar el token y redirigir
-        this._service.token = response.response;
-        localStorage.setItem('authToken', response.response);
-        alert("Inicio de sesión exitoso");
-        this._router.navigate(['/perfil']);
-      },
-      error: err => {
-        alert("Usuario o contraseña incorrectos");
-        console.error(err);
-      }
-    });
+    try {
+      const token = await this._service.loginEmpleado(loginData);
+      console.log("Token recibido:", token);
+      localStorage.setItem('authToken', token); // Guardamos el token en localStorage
+      alert("Inicio de sesión exitoso.");
+      this._router.navigate(['/perfil']); // Navegamos al perfil
+    } catch (error) {
+      alert("Usuario o contraseña incorrectos.");
+      console.error("Error en el inicio de sesión:", error);
+    }
   }
 }

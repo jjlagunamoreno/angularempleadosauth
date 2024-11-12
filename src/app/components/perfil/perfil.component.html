@@ -1,23 +1,20 @@
-<div class="container mt-5">
-    <h2 class="text-center text-primary">Perfil de Empleados</h2>
-    <table class="table table-bordered mt-4">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Apellido</th>
-                <th>Oficio</th>
-                <th>Salario</th>
-                <th>Director</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let empleado of empleados">
-                <td>{{ empleado.idEmpleado }}</td>
-                <td>{{ empleado.apellido }}</td>
-                <td>{{ empleado.oficio }}</td>
-                <td>{{ empleado.salario }}</td>
-                <td>{{ empleado.director }}</td>
-            </tr>
-        </tbody>
-    </table>
+<div style="padding: 5%;">
+    <h1>Perfil del empleado</h1>
+    @if (empleado){
+    <ul class="list-group">
+        <li class="list-group-item">
+            Apellido {{empleado.apellido}}
+        </li>
+        <li class="list-group-item">
+            Oficio: {{empleado.oficio}}
+        </li>
+        <li class="list-group-item">
+            Salario: {{empleado.salario}}
+        </li>
+        <li class="list-group-item">
+            Director: {{empleado.director}}
+        </li>
+    </ul>
+    }
+
 </div>
